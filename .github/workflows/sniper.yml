@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
@@ -18,9 +18,8 @@ jobs:
           php-version: '8.2'
           extensions: curl, openssl
 
-      - name: Install Oracle SDK manually
-        run: |
-          composer require hitrov/oci-api-php:^1.0 --no-interaction
+      - name: Install dependencies
+        run: composer install --no-interaction --optimize-autoloader
 
       - name: Create Private Key File
         run: |
