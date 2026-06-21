@@ -3,7 +3,7 @@ name: OCI Cloud Sniper
 on:
   schedule:
     - cron: '*/5 * * * *' # Runs automatically every 5 minutes
-  workflow_dispatch: # Allows you to click a button to run it manually
+  workflow_dispatch: # Allows manually clicking the button
 
 jobs:
   hunt:
@@ -16,9 +16,11 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: '8.2'
+          extensions: curl, openssl
 
-      - name: Install dependencies
-        run: composer install --no-dev --optimize-autoloader
+      - name: Install Oracle SDK manually
+        run: |
+          composer require hitrov/oci-api-php:^1.0 --no-interaction
 
       - name: Create Private Key File
         run: |
