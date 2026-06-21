@@ -2,8 +2,8 @@ name: OCI Cloud Sniper
 
 on:
   schedule:
-    - cron: '*/5 * * * *' # Runs automatically every 5 minutes
-  workflow_dispatch: # Allows manually clicking the button
+    - cron: '*/5 * * * *'
+  workflow_dispatch:
 
 jobs:
   hunt:
@@ -23,7 +23,9 @@ jobs:
 
       - name: Create Private Key File
         run: |
-          echo "${{ secrets.OCI_PRIVATE_KEY }}" > ./oci_api_key.pem
+          cat << 'EOF' > ./oci_api_key.pem
+          ${{ secrets.OCI_PRIVATE_KEY }}
+          EOF
           chmod 600 ./oci_api_key.pem
 
       - name: Execute Sniper
@@ -36,4 +38,7 @@ jobs:
           OCI_IMAGE_ID: ${{ secrets.OCI_IMAGE_ID }}
           OCI_SSH_PUBLIC_KEY: ${{ secrets.OCI_SSH_PUBLIC_KEY }}
           OCI_PRIVATE_KEY_FILENAME: ./oci_api_key.pem
+          OCI_SHAPE: 'VM.Standard.A1.Flex'
+          OCI_OCPUS: '4'
+          OCI_MEMORY_IN_GBS: '24'
         run: php index.php
